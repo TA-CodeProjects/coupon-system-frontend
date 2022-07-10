@@ -1,0 +1,14 @@
+.AdminPanel {
+	width: 50%;
+    margin: 0 auto;
+}
+
+.AdminPanel .CustomLink {
+    color: white;
+}
+
+.AdminPanel .CustomLink .active {
+    color: white;
+    border-bottom: 3px solid white;
+    
+}

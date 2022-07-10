@@ -1,0 +1,15 @@
+.Footer {
+	
+}
+
+.Footer .CustomLink {
+    color: white;
+}
+
+.Footer .CustomLink .active {
+    color: white;
+    border-bottom: 3px solid white;
+    /* font-weight: 700;
+    font-size: xx-large;
+    text-decoration: dashed; */
+}

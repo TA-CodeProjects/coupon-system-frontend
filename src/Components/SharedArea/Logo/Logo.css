@@ -1,0 +1,8 @@
+.Logo {
+	display: inline;
+}
+
+.Logo > img {
+    width: 60px;
+}
+

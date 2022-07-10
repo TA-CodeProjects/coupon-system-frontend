@@ -1,0 +1,45 @@
+.CustomLink {
+    color: white;
+    /* margin-bottom: 15px;
+    font-size: 30px;
+    text-decoration: none; */
+}
+
+
+.CustomLink .active {
+    color: white;
+    border-bottom: 3px solid white;
+    /* font-weight: 700;
+    font-size: xx-large;
+    text-decoration: dashed; */
+}
+
+.CustomLink:link {
+    text-decoration: none;
+}
+
+.CustomLink:hover {
+    cursor: pointer;
+    color: gray;
+    /* background-color: gray; */
+}
+
+/* .CustomLink:visited {
+    color: red;
+} */
+
+.dropdown-menu .CustomLink , .CouponList td .CustomLink,.CustomerList td .CustomLink, .CompanyList td .CustomLink {
+    color: black;
+    /* margin-bottom: 15px;
+    font-size: 30px;
+    text-decoration: none; */
+}
+
+
+.dropdown-menu .CustomLink .active, .CouponList td .CustomLink .active, .CustomerList  td .CustomLink .active,.CompanyList td .CustomLink .active {
+    color: black;
+    border-bottom: 3px solid black;
+    /* font-weight: 700;
+    font-size: xx-large;
+    text-decoration: dashed; */
+}
