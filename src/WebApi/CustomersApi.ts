@@ -16,7 +16,7 @@ export async function countCustomers() {
 
 export async function addCustomer(customer: CustomerModel) {
   return await tokenAxios.post<CustomerModel>(
-    globals.urls.customers + customer
+    globals.urls.customers, customer
   );
 };
 

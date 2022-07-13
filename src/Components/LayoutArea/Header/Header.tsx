@@ -17,8 +17,12 @@ function Header(): JSX.Element {
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
-              <Nav className="me-auto"></Nav>
-              <Nav>
+              <Nav.Link>
+                <CustomLink to="home">Home</CustomLink>
+              </Nav.Link>
+              {/* <Nav className="me-auto"></Nav> */}
+              <AuthMenu />
+              {/* <Nav>
                 <Nav.Link>
                   <CustomLink to="home">Home</CustomLink>
                 </Nav.Link>
@@ -31,9 +35,8 @@ function Header(): JSX.Element {
                 <Nav.Link>
                   <CustomLink to="/customer">Customer</CustomLink>{" "}
                 </Nav.Link>
-              </Nav>
+              </Nav> */}
             </Navbar.Collapse>
-            <AuthMenu />
           </Container>
         </Navbar>
       </div>

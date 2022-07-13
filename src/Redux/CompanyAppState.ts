@@ -37,8 +37,10 @@ export function companiesClearAction(): CompanyAction {
     return { type: CompanyActionType.CompaniesClear, payload: {} };
 }
 
-export function companiesReducer(currentState: CompanyAppState = new CompanyAppState(), action: CompanyAction): CompanyAppState {
-    const newState = { ...currentState}
+export function companiesReducer(
+    currentState: CompanyAppState = new CompanyAppState(),
+    action: CompanyAction): CompanyAppState {
+    const newState = { ...currentState};
     switch (action.type) {
         case CompanyActionType.CompaniesDownloaded:
             newState.companies = action.payload;
@@ -47,7 +49,7 @@ export function companiesReducer(currentState: CompanyAppState = new CompanyAppS
             newState.companies.push(action.payload);
             break;
         case CompanyActionType.CompanyUpdated:
-            const idx = newState.companies.findIndex(company => company.id === action.payload.id);
+            const idx = newState.companies.findIndex((company) => company.id === action.payload.id);
             newState.companies[idx] = action.payload;
             break;
         case CompanyActionType.CompanyDeleted:

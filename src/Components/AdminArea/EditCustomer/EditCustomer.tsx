@@ -7,6 +7,8 @@ import { customerUpdatedAction } from "../../../Redux/CustomerAppState";
 import store from "../../../Redux/store";
 import notify, { ErrMsg } from "../../../Services/Notification";
 import { updateCustomer } from "../../../WebApi/CustomersApi";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import "./EditCustomer.css";
 
 function EditCustomer(): JSX.Element {
@@ -21,12 +23,15 @@ function EditCustomer(): JSX.Element {
       .getState()
       .customerReducer.customers.filter((customer) => customer.id === id)[0]
   );
+  console.log(id);
 
-  // const schema = yup.object().shape({
-  //   name: yup.string().required("name is required"),
-  //   email: yup.string().required("email is required"),
-  //   password: yup.string().required("password is required"),
-  // });
+  const schema = yup.object().shape({
+    firstName: yup.string().required("First name is required"),
+    lastName: yup.string().required("Last name is required"),
+    email: yup.string().email("Email is required"),
+    password: yup.string().min(4).max(15).required("Password is required"),
+  });
+
 
   let defaultValuesObj = { ...customer };
 
@@ -35,7 +40,11 @@ function EditCustomer(): JSX.Element {
     handleSubmit,
     control,
     formState: { errors, isDirty, isValid },
-  } = useForm<CustomerModel>({ defaultValues: defaultValuesObj, mode: "all" });
+  } = useForm<CustomerModel>({
+    defaultValues: defaultValuesObj,
+    mode: "all",
+    resolver: yupResolver(schema),
+  });
 
   const { dirtyFields } = useFormState({ control });
 
@@ -65,7 +74,7 @@ function EditCustomer(): JSX.Element {
             type="text"
             placeholder="Enter First Name"
           />
-          <span>{errors.firstName?.message}</span>
+          <span className="text-danger">{errors.firstName?.message}</span>
         </Form.Group>
         <Form.Group className="mb-3" controlId="formLastName">
           <Form.Label>Last Name</Form.Label>
@@ -74,7 +83,7 @@ function EditCustomer(): JSX.Element {
             type="text"
             placeholder="Enter Last Name"
           />
-          <span>{errors.lastName?.message}</span>
+          <span className="text-danger">{errors.lastName?.message}</span>
         </Form.Group>
         <Form.Group className="mb-3" controlId="formEmail">
           <Form.Label>Email</Form.Label>
@@ -83,7 +92,7 @@ function EditCustomer(): JSX.Element {
             type="email"
             placeholder="Enter Email"
           />
-          <span>{errors.email?.message}</span>
+          <span className="text-danger">{errors.email?.message}</span>
         </Form.Group>
         <Form.Group className="mb-3" controlId="formName">
           <Form.Label>Password</Form.Label>
@@ -92,10 +101,10 @@ function EditCustomer(): JSX.Element {
             type="text"
             placeholder="Enter Password"
           />
-          <span>{errors.password?.message}</span>
+          <span className="text-danger">{errors.password?.message}</span>
         </Form.Group>
         <Form.Group>
-          <Button disabled={!isDirty} variant="primary" type="submit">
+          <Button disabled={!isDirty || !isValid} variant="primary" type="submit">
             Update
           </Button>
         </Form.Group>

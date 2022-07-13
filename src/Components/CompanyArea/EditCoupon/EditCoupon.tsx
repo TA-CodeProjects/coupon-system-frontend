@@ -3,10 +3,12 @@ import { Button, Form } from "react-bootstrap";
 import { useForm, useFormState } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { CouponsModel } from "../../../Models/Coupons";
-import { couponUpdatedAction } from "../../../Redux/CouponAppState";
+import { couponUpdatedAction } from "../../../Redux/CouponCompanyAppState";
 import store from "../../../Redux/store";
 import notify from "../../../Services/Notification";
-import { updateCoupon } from "../../../WebApi/CouponsApi";
+import { updateCoupon } from "../../../WebApi/CouponsCompanyApi";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import "./EditCoupon.css";
 
 function EditCoupon(): JSX.Element {
@@ -18,16 +20,34 @@ function EditCoupon(): JSX.Element {
      const [coupon, setCoupon] = useState<CouponsModel>(
        store
          .getState()
-         .couponsReducer.coupons.filter((coupon) => coupon.id === id)[0]
+         .couponsCompanyReducer.coupons.filter((coupon) => coupon.id === id)[0]
      );
 
-     // const schema = yup.object().shape({
-     //   name: yup.string().required("name is required"),
-     //   email: yup.string().required("email is required"),
-     //   password: yup.string().required("password is required"),
-     // });
+    const schema = yup.object().shape({
+      category: yup.string().required("Category is required"),
+      title: yup.string().required("Title is required"),
+      description: yup.string().required("description is required"),
+      startDate: yup
+        .date()
+        .default(new Date())
+        .typeError("You must specify task date")
+        .required("When is required")
+        .nullable()
+        .default(() => new Date()),
+      endDate: yup
+        .date()
+        .default(new Date())
+        .typeError("You must specify task date")
+        .required("When is required")
+        .nullable()
+        .default(() => new Date()),
+      amount: yup.number(),
+      price: yup.number(),
+      image: yup.string().required("Image is required"),
+    });
 
      let defaultValuesObj = { ...coupon };
+     console.log(coupon)
 
      const {
        register,
@@ -37,6 +57,7 @@ function EditCoupon(): JSX.Element {
      } = useForm<CouponsModel>({
        defaultValues: defaultValuesObj,
        mode: "all",
+       resolver: yupResolver(schema),
      });
 
      const { dirtyFields } = useFormState({ control });
@@ -45,7 +66,7 @@ function EditCoupon(): JSX.Element {
        console.log(coupon);
        console.log(JSON.stringify(coupon));
 
-       await updateCoupon(id, coupon)
+       updateCoupon(id, coupon)
          .then((res) => {
            notify.success("Coupon Update");
            store.dispatch(couponUpdatedAction(res.data));
@@ -74,7 +95,7 @@ function EditCoupon(): JSX.Element {
               type="text"
               placeholder="Enter Title"
             />
-            <span>{errors.title?.message}</span>
+            <span className="text-danger">{errors.title?.message}</span>
           </Form.Group>
           <Form.Group className="mb-3" controlId="formDescription">
             <Form.Label>Description</Form.Label>
@@ -83,7 +104,7 @@ function EditCoupon(): JSX.Element {
               type="text"
               placeholder="Enter Description"
             />
-            <span>{errors.description?.message}</span>
+            <span className="text-danger">{errors.description?.message}</span>
           </Form.Group>
           <Form.Group className="mb-3" controlId="formStartDate">
             <Form.Label>Start Date</Form.Label>
@@ -92,7 +113,7 @@ function EditCoupon(): JSX.Element {
               type="date"
               placeholder="pick a start date"
             />
-            <span>{errors.startDate?.message}</span>
+            <span className="text-danger">{errors.startDate?.message}</span>
           </Form.Group>
           <Form.Group className="mb-3" controlId="formEndDate">
             <Form.Label>End Date</Form.Label>
@@ -101,7 +122,7 @@ function EditCoupon(): JSX.Element {
               type="date"
               placeholder="pick a end date"
             />
-            <span>{errors.endDate?.message}</span>
+            <span className="text-danger">{errors.endDate?.message}</span>
           </Form.Group>
           <Form.Group className="mb-3" controlId="formAmount">
             <Form.Label>Amount</Form.Label>
@@ -110,7 +131,7 @@ function EditCoupon(): JSX.Element {
               type="number"
               placeholder="Enter Amount"
             />
-            <span>{errors.amount?.message}</span>
+            <span className="text-danger">{errors.amount?.message}</span>
           </Form.Group>
           <Form.Group className="mb-3" controlId="formPrice">
             <Form.Label>Price</Form.Label>
@@ -119,7 +140,7 @@ function EditCoupon(): JSX.Element {
               type="number"
               placeholder="Enter Price"
             />
-            <span>{errors.price?.message}</span>
+            <span className="text-danger">{errors.price?.message}</span>
           </Form.Group>
           <Form.Group className="mb-3" controlId="formImage">
             <Form.Label>Image</Form.Label>
@@ -128,10 +149,14 @@ function EditCoupon(): JSX.Element {
               type="text"
               placeholder="Enter image filename"
             />
-            <span>{errors.image?.message}</span>
+            <span className="text-danger">{errors.image?.message}</span>
           </Form.Group>
           <Form.Group>
-            <Button disabled={!isValid} variant="primary" type="submit">
+            <Button
+              disabled={!isValid || !isDirty}
+              variant="primary"
+              type="submit"
+            >
               Update
             </Button>
           </Form.Group>

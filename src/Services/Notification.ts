@@ -24,7 +24,7 @@ export enum ErrMsg {
 
 class Notify {
   private notification = new Notyf({
-    duration: 4000,
+    duration: 6000,
     position: { x: "left", y: "top" },
   });
 

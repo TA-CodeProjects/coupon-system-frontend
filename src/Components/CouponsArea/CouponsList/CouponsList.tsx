@@ -1,25 +1,32 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import {  Col, Container, Row } from "react-bootstrap";
 import { CouponsModel } from "../../../Models/Coupons";
-import globals from "../../../Services/globals";
+import { couponsDownloadedAction } from "../../../Redux/CouponsAppState";
+import store from "../../../Redux/store";
 import notify from "../../../Services/Notification";
+import { getCoupons } from "../../../WebApi/CouponsApi";
 import CouponItem from "../CouponItem/CouponItem";
+import CouponTable from "../CouponTable/CouponTable";
 import "./CouponsList.css";
 
 function CouponsList(): JSX.Element {
-
-    const [coupons, setCoupons] = useState<CouponsModel[]>([]);
+    const [coupons, setCoupons] = useState<CouponsModel[]>(
+      store.getState().couponsReducer.coupons
+    );
 
     useEffect(() => {
-        axios.get<CouponsModel[]>(globals.urls.coupons)
-        .then((res) => {
-            notify.success("Got Coupons List Successfully!");
-            setCoupons(res.data);
-        })
-        .catch((err) => {
-            notify.error(err.message);
-        });
+      // if (coupons?.length === 0) {
+         getCoupons()
+           .then((res) => {
+             notify.success("Got Coupons List Successfully!");
+             setCoupons(res.data);
+             store.dispatch(couponsDownloadedAction(res.data));
+           })
+           .catch((err) => {
+             notify.error(err.message);
+           });
+      // }
+       
     }, []);
     
 
@@ -27,17 +34,7 @@ function CouponsList(): JSX.Element {
       <div className="CouponsList">
         <Container>
           <h2 className="text-center">Coupons List</h2>
-          <div className="list">
-            <Row xs={1} md={2} lg={4} className="g-4">
-              {coupons.length > 0
-                ? coupons.map((coupon) => (
-                  <Col className="d-flex">
-                      <CouponItem key={coupon.id} coupon={coupon} />
-                    </Col>
-                  ))
-                : "No Coupons Available"}
-            </Row>
-          </div>
+          <CouponTable coupons={coupons} />
         </Container>
       </div>
     );

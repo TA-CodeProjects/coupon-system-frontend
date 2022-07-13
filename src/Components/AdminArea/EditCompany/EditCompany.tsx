@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { CompanyModel, CompanyPayloadModel } from "../../../Models/Company";
-// import * as yup from "yup";
+import { CompanyModel } from "../../../Models/Company";
 import "./EditCompany.css";
 import { useForm, useFormState } from "react-hook-form";
 import notify, { ErrMsg } from "../../../Services/Notification";
@@ -8,6 +7,8 @@ import { Button, Form } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import store from "../../../Redux/store";
 import { companyUpdatedAction } from "../../../Redux/CompanyAppState";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { updateCompany } from "../../../WebApi/CompaniesApi";
 
 function EditCompany(): JSX.Element {
@@ -16,22 +17,32 @@ function EditCompany(): JSX.Element {
     const params = useParams();
     const id = +(params.id || "");
 
-    const [company, setCompany] = useState<CompanyModel>(store.getState().companyReducer.companies.filter(company => company.id === id)[0]);
+    const [company, setCompany] = useState<CompanyModel>(
+      store
+      .getState()
+      .companyReducer.companies.filter((company) => company.id === id)[0]);
 
-    // const schema = yup.object().shape({
-    //   name: yup.string().required("name is required"),
-    //   email: yup.string().required("email is required"),
-    //   password: yup.string().required("password is required"),
-    // });
+      console.log(id);
+
+     const schema = yup.object().shape({
+       name: yup.string().required("name is required"),
+       email: yup.string().email("Email is required"),
+       password: yup.string().min(4).max(15).required("Password is required"),
+     });
 
     let defaultValuesObj = {...company};
+    
 
     const {
       register,
       handleSubmit,
       control,
       formState: { errors, isDirty, isValid },
-    } = useForm<CompanyModel>({ defaultValues: defaultValuesObj, mode: "all" });
+    } = useForm<CompanyModel>({
+      defaultValues: defaultValuesObj,
+      mode: "all",
+      resolver: yupResolver(schema),
+    });
 
     const {dirtyFields} = useFormState({control});
 
@@ -39,7 +50,7 @@ function EditCompany(): JSX.Element {
       console.log(company);
       console.log(JSON.stringify(company));
 
-      await updateCompany(id, company)
+      updateCompany(id, company)
         .then((res) => {
           notify.success("Company Update");
           store.dispatch(companyUpdatedAction(res.data));
@@ -54,6 +65,15 @@ function EditCompany(): JSX.Element {
       <div className="EditCompany">
         <h2 className="text-center">Update Company</h2>
         <Form onSubmit={handleSubmit(yalla)}>
+          {/* <Form.Group className="mb-3" controlId="formName">
+            <Form.Label>Id</Form.Label>
+            <Form.Control
+              {...register("id")}
+              type="number"
+              disabled={true}
+              placeholder="Id"
+            />
+          </Form.Group> */}
           <Form.Group className="mb-3" controlId="formName">
             <Form.Label>Name</Form.Label>
             <Form.Control
@@ -61,7 +81,7 @@ function EditCompany(): JSX.Element {
               type="text"
               placeholder="Enter Name"
             />
-            <span>{errors.name?.message}</span>
+            <span className="text-danger">{errors.name?.message}</span>
           </Form.Group>
           <Form.Group className="mb-3" controlId="formEmail">
             <Form.Label>Email</Form.Label>
@@ -70,7 +90,7 @@ function EditCompany(): JSX.Element {
               type="email"
               placeholder="Enter Email"
             />
-            <span>{errors.email?.message}</span>
+            <span className="text-danger">{errors.email?.message}</span>
           </Form.Group>
           <Form.Group className="mb-3" controlId="formName">
             <Form.Label>Password</Form.Label>
@@ -79,10 +99,10 @@ function EditCompany(): JSX.Element {
               type="text"
               placeholder="Enter Password"
             />
-            <span>{errors.password?.message}</span>
+            <span className="text-danger">{errors.password?.message}</span>
           </Form.Group>
           <Form.Group>
-            <Button disabled={!isDirty} variant="primary" type="submit">
+            <Button disabled={!isDirty || !isValid} variant="primary" type="submit">
               Update
             </Button>
           </Form.Group>

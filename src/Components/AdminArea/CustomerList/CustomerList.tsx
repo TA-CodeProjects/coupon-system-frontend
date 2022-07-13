@@ -27,7 +27,6 @@ function CustomerList(): JSX.Element {
   );
 
   useEffect(() => {
-    if (customers?.length === 0) {
         getCustomers()
           .then((res) => {
             notify.success("Got customers list successfully!");
@@ -37,7 +36,6 @@ function CustomerList(): JSX.Element {
           .catch((err) => {
             notify.error(err.message);
           });
-    }
   }, []);
 
   return (

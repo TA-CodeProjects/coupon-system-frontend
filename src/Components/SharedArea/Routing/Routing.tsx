@@ -21,6 +21,7 @@ import Page404 from "../Page404/Page404";
 import "./Routing.css";
 import Login from "../../AuthArea/Login/Login";
 import Logout from "../../AuthArea/Logout/Logout";
+import PurchaseCoupon from "../../CustomerArea/PurchaseCoupon/PurchaseCoupon";
 
 function Routing(): JSX.Element {
   return (
@@ -46,6 +47,7 @@ function Routing(): JSX.Element {
         <Route path="/company/edit/:id" element={<EditCoupon />} />
         <Route path="/company/delete/:id" element={<DeleteCoupon />} />
         <Route path="/customer" element={<CouponCustomerList />} />
+        <Route path="/customer/purchaseCoupon/:id" element={<PurchaseCoupon />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
       </Routes>

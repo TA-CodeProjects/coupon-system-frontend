@@ -1,30 +1,50 @@
 import { useNavigate } from "react-router-dom";
 import { appendErrors, useForm } from "react-hook-form";
 import "./AddCoupon.css";
-import axios from "axios";
 import { CouponsPayloadModel } from "../../../Models/Coupons";
-import globals from "../../../Services/globals";
 import notify, { ErrMsg } from "../../../Services/Notification";
 import store from "../../../Redux/store";
 import { Button, Form } from "react-bootstrap";
-import { couponAddedAction } from "../../../Redux/CouponAppState";
-import { addCoupon } from "../../../WebApi/CouponsApi";
-import { useEffect } from "react";
+import { couponAddedAction } from "../../../Redux/CouponCompanyAppState";
+import { addCoupon } from "../../../WebApi/CouponsCompanyApi";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 function AddCoupon(): JSX.Element {
      const navigate = useNavigate();
+     
 
-     // const schema = yup.object().shape({
-     //   name: yup.string().required("name is required"),
-     //   email: yup.string().required("email is required"),
-     //   password: yup.string().required("password is required"),
-     // });
-
+     const schema = yup.object().shape({
+       category: yup.string().required("Category is required"),
+       title: yup.string().required("Title is required"),
+       description: yup.string().required("description is required"),
+       startDate: yup
+         .date()
+         .default(new Date())
+         .typeError("You must specify coupon date")
+         .required("When is required")
+         .nullable()
+         .default(() => new Date()),
+       endDate: yup
+         .date()
+         .default(new Date())
+         .typeError("You must specify coupon date")
+         .required("When is required")
+         .nullable()
+         .default(() => new Date()),
+       amount: yup.number(),
+       price: yup.number(),
+       image: yup.string().required("Image is required"),
+     });
+     
      const {
        register,
        handleSubmit,
        formState: { errors, isDirty, isValid },
-     } = useForm<CouponsPayloadModel>({ mode: "all" });
+     } = useForm<CouponsPayloadModel>({
+       mode: "all",
+       resolver: yupResolver(schema),
+     });
 
      const yalla = async (coupon: CouponsPayloadModel) => {
        console.log(coupon);
@@ -59,7 +79,7 @@ function AddCoupon(): JSX.Element {
               type="text"
               placeholder="Enter Title"
             />
-            <span>{errors.title?.message}</span>
+            <span className="text-danger">{errors.title?.message}</span>
           </Form.Group>
           <Form.Group className="mb-3" controlId="formDescription">
             <Form.Label>Description</Form.Label>
@@ -68,7 +88,7 @@ function AddCoupon(): JSX.Element {
               type="text"
               placeholder="Enter Description"
             />
-            <span>{errors.description?.message}</span>
+            <span className="text-danger">{errors.description?.message}</span>
           </Form.Group>
           <Form.Group className="mb-3" controlId="formStartDate">
             <Form.Label>Start Date</Form.Label>
@@ -77,7 +97,7 @@ function AddCoupon(): JSX.Element {
               type="date"
               placeholder="pick a start date"
             />
-            <span>{errors.startDate?.message}</span>
+            <span className="text-danger">{errors.startDate?.message}</span>
           </Form.Group>
           <Form.Group className="mb-3" controlId="formEndDate">
             <Form.Label>End Date</Form.Label>
@@ -86,7 +106,7 @@ function AddCoupon(): JSX.Element {
               type="date"
               placeholder="pick a end date"
             />
-            <span>{errors.endDate?.message}</span>
+            <span className="text-danger">{errors.endDate?.message}</span>
           </Form.Group>
           <Form.Group className="mb-3" controlId="formAmount">
             <Form.Label>Amount</Form.Label>
@@ -95,7 +115,7 @@ function AddCoupon(): JSX.Element {
               type="number"
               placeholder="Enter Amount"
             />
-            <span>{errors.amount?.message}</span>
+            <span className="text-danger">{errors.amount?.message}</span>
           </Form.Group>
           <Form.Group className="mb-3" controlId="formPrice">
             <Form.Label>Price</Form.Label>
@@ -104,7 +124,7 @@ function AddCoupon(): JSX.Element {
               type="number"
               placeholder="Enter Price"
             />
-            <span>{errors.price?.message}</span>
+            <span className="text-danger">{errors.price?.message}</span>
           </Form.Group>
           <Form.Group className="mb-3" controlId="formImage">
             <Form.Label>Image</Form.Label>
@@ -113,7 +133,7 @@ function AddCoupon(): JSX.Element {
               type="text"
               placeholder="Enter image filename"
             />
-            <span>{errors.image?.message}</span>
+            <span className="text-danger">{errors.image?.message}</span>
           </Form.Group>
           <Form.Group>
             <Button disabled={!isValid} variant="primary" type="submit">

@@ -12,5 +12,5 @@ export async function getCoupon(id: number) {
 };
 
 export async function purchaseCoupon(coupon: CouponsModel) {
-    return await tokenAxios.post<CouponsModel>(globals.urls.customer, coupon);
+  return await tokenAxios.put<CouponsModel>(globals.urls.customer, coupon);
 };

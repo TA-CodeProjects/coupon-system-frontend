@@ -1,34 +1,35 @@
-import axios from "axios";
-import { useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { CustomerPayloadModel } from "../../../Models/Customer";
 import { customerAddedAction } from "../../../Redux/CustomerAppState";
 import store from "../../../Redux/store";
-import globals from "../../../Services/globals";
 import notify, { ErrMsg } from "../../../Services/Notification";
 import { addCustomer } from "../../../WebApi/CustomersApi";
-import "./AddCustomer.css";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 function AddCustomer(): JSX.Element {
   const navigate = useNavigate();
 
-  // const schema = yup.object().shape({
-  //   name: yup.string().required("name is required"),
-  //   email: yup.string().required("email is required"),
-  //   password: yup.string().required("password is required"),
-  // });
+  const schema = yup.object().shape({
+    firstName: yup.string().required("First name is required"),
+    lastName: yup.string().required("Last name is required"),
+    email: yup.string().email("Email is required"),
+    password: yup.string().min(4).max(15).required("Password is required"),
+  });
 
   const {
     register,
     handleSubmit,
     formState: { errors, isDirty, isValid },
-  } = useForm<CustomerPayloadModel>({ mode: "all" });
+  } = useForm<CustomerPayloadModel>({
+    mode: "all",
+    resolver: yupResolver(schema),
+  });
 
   const yalla = async (customer: CustomerPayloadModel) => {
     console.log(customer);
-    console.log(JSON.stringify(customer));
 
     await addCustomer(customer)
       .then((res) => {
@@ -52,7 +53,7 @@ function AddCustomer(): JSX.Element {
             type="text"
             placeholder="Enter First Name"
           />
-          <span>{errors.firstName?.message}</span>
+          <span className="text-danger">{errors.firstName?.message}</span>
         </Form.Group>
         <Form.Group className="mb-3" controlId="formLastName">
           <Form.Label>Last Name</Form.Label>
@@ -61,7 +62,7 @@ function AddCustomer(): JSX.Element {
             type="text"
             placeholder="Enter Last Name"
           />
-          <span>{errors.lastName?.message}</span>
+          <span className="text-danger">{errors.lastName?.message}</span>
         </Form.Group>
         <Form.Group className="mb-3" controlId="formEmail">
           <Form.Label>Email</Form.Label>
@@ -70,7 +71,7 @@ function AddCustomer(): JSX.Element {
             type="email"
             placeholder="Enter Email"
           />
-          <span>{errors.email?.message}</span>
+          <span className="text-danger">{errors.email?.message}</span>
         </Form.Group>
         <Form.Group className="mb-3" controlId="formName">
           <Form.Label>Password</Form.Label>
@@ -79,7 +80,7 @@ function AddCustomer(): JSX.Element {
             type="text"
             placeholder="Enter Password"
           />
-          <span>{errors.password?.message}</span>
+          <span className="text-danger">{errors.password?.message}</span>
         </Form.Group>
         <Form.Group>
           <Button disabled={!isValid} variant="primary" type="submit">

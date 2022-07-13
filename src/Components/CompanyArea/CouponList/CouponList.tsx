@@ -5,13 +5,12 @@ import axios from "axios";
 import "./CouponList.css";
 import globals from "../../../Services/globals";
 import notify, { ErrMsg } from "../../../Services/Notification";
-import { couponsDownloadedAction } from "../../../Redux/CouponAppState";
+import { couponsDownloadedAction } from "../../../Redux/CouponCompanyAppState";
 import { Button, ButtonGroup, Dropdown, DropdownButton, Table } from "react-bootstrap";
 import CustomLink from "../../SharedArea/CustomLink/CustomLink";
 import CouponItem from "../CouponItem/CouponItem";
-import { getCoupons } from "../../../WebApi/CouponsApi";
+import { getCoupons } from "../../../WebApi/CouponsCompanyApi";
 import CouponTable from "../CouponTable/CouponTable";
-import { DataCoupons } from "../../../Models/DataCoupons";
 import { Link, useNavigate } from "react-router-dom";
 
 function CouponList(): JSX.Element {
@@ -25,7 +24,7 @@ function CouponList(): JSX.Element {
       }, []);  
 
      const [coupons, setCoupons] = useState<CouponsModel[]>(
-      store.getState().couponsReducer.coupons
+      store.getState().couponsCompanyReducer.coupons
      );
       
     

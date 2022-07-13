@@ -4,8 +4,6 @@ import Table from "react-bootstrap/Table";
 import "./CompanyList.css";
 import { useEffect, useState } from "react";
 import { CompanyModel } from "../../../Models/Company";
-import axios from "axios";
-import globals from "../../../Services/globals";
 import notify, { ErrMsg } from "../../../Services/Notification";
 import CustomLink from "../../SharedArea/CustomLink/CustomLink";
 import store from "../../../Redux/store";

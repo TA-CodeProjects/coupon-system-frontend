@@ -5,7 +5,7 @@ import { couponsDownloadedAction } from "../../../Redux/CouponCustomerAppState";
 import store from "../../../Redux/store";
 import notify, { ErrMsg } from "../../../Services/Notification";
 import { getCoupons } from "../../../WebApi/CouponsCustomerApi";
-import CouponTable from "../../CompanyArea/CouponTable/CouponTable";
+import CouponTable from "../../CustomerArea/CouponTable/CouponTable";
 import "./CouponList.css";
 
 function CouponCustomerList(): JSX.Element {

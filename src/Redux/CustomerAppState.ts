@@ -9,7 +9,7 @@ export enum CustomerActionType {
   CustomerAdded = "CustomerAdded",
   CustomerUpdated = "CustomerUpdated",
   CustomerDeleted = "CustomerDeleted",
-  CustomersClear = "CustomersClear",
+  CustomersClear = "CustomersClear"
 }
 
 export interface CustomerAction {

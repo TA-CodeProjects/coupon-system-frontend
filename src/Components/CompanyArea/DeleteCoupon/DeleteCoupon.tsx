@@ -1,9 +1,9 @@
 import { Button } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
-import { couponDeletedAction } from "../../../Redux/CouponAppState";
+import { couponDeletedAction } from "../../../Redux/CouponCompanyAppState";
 import store from "../../../Redux/store";
 import notify from "../../../Services/Notification";
-import { deleteCoupon } from "../../../WebApi/CouponsApi";
+import { deleteCoupon } from "../../../WebApi/CouponsCompanyApi";
 import "./DeleteCoupon.css";
 
 function DeleteCoupon(): JSX.Element {
