@@ -1,7 +1,7 @@
 import { CouponsModel } from "../Models/Coupons";
 
 export class CouponsCompanyAppState {
-    public coupons: CouponsModel[] = [];
+    public couponsCompany: CouponsModel[] = [];
 }
 
 
@@ -18,17 +18,30 @@ export interface CouponsCompanyAction {
     payload?: any;
 }
 
-export function couponsDownloadedAction(coupons: CouponsModel[]): CouponsCompanyAction {
-    return { type: CouponsCompanyActionType.CouponsDownloaded, payload: coupons };
+export function couponsDownloadedAction(
+  couponsCompany: CouponsModel[]
+): CouponsCompanyAction {
+  return {
+    type: CouponsCompanyActionType.CouponsDownloaded,
+    payload: couponsCompany,
+  };
 }
 
 
-export function couponAddedAction(coupon: CouponsModel): CouponsCompanyAction {
-  return { type: CouponsCompanyActionType.CouponAdded, payload: coupon };
+export function couponAddedAction(couponsCompany: CouponsModel): CouponsCompanyAction {
+  return {
+    type: CouponsCompanyActionType.CouponAdded,
+    payload: couponsCompany,
+  };
 }
 
-export function couponUpdatedAction(coupon: CouponsModel): CouponsCompanyAction {
-  return { type: CouponsCompanyActionType.CouponUpdated, payload: coupon };
+export function couponUpdatedAction(
+  couponsCompany: CouponsModel
+): CouponsCompanyAction {
+  return {
+    type: CouponsCompanyActionType.CouponUpdated,
+    payload: couponsCompany,
+  };
 }
 
 export function couponDeletedAction(id: number): CouponsCompanyAction {
@@ -46,24 +59,24 @@ export function couponsCompanyReducer(
   const newState = { ...currentState };
   switch (action.type) {
     case CouponsCompanyActionType.CouponsDownloaded:
-      newState.coupons = action.payload;
+      newState.couponsCompany = action.payload;
       break;
     case CouponsCompanyActionType.CouponAdded:
-      newState.coupons.push(action.payload);
+      newState.couponsCompany.push(action.payload);
       break;
     case CouponsCompanyActionType.CouponUpdated:
-      const idx = newState.coupons.findIndex(
+      const idx = newState.couponsCompany.findIndex(
         (coupon) => coupon.id === action.payload.id
       );
-      newState.coupons[idx] = action.payload;
+      newState.couponsCompany[idx] = action.payload;
       break;
     case CouponsCompanyActionType.CouponDeleted:
-      newState.coupons = newState.coupons.filter(
+      newState.couponsCompany = newState.couponsCompany.filter(
         (coupon) => coupon.id !== action.payload
       );
       break;
     case CouponsCompanyActionType.CouponsClear:
-      newState.coupons = [];
+      newState.couponsCompany = [];
       break;
   }
   return newState;

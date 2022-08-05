@@ -1,46 +1,57 @@
-import { useEffect } from "react";
-import { Button } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
+import { Button, Modal } from "react-bootstrap";
+import { CustomerModel } from "../../../Models/Customer";
 import { customerDeletedAction } from "../../../Redux/CustomerAppState";
 import store from "../../../Redux/store";
-import notify, { ErrMsg } from "../../../Services/Notification";
+import notify, { ErrMsg, SccMsg } from "../../../Services/Notification";
 import { deleteCustomer } from "../../../WebApi/CustomersApi";
 import "./DeleteCustomer.css";
 
-function DeleteCustomer(): JSX.Element {
-  const navigate = useNavigate();
+interface DeleteCustomerProps {
+  id?: number;
+  show: boolean;
+  handleClose: any;
+  setCustomers: React.Dispatch<React.SetStateAction<CustomerModel[]>>;
+}
 
-  const params = useParams();
-  const id = +(params.id || "");
-
+function DeleteCustomer(props: DeleteCustomerProps): JSX.Element {
+ 
   const yes = () => {
-    deleteCustomer(id)
+    deleteCustomer(props.id || 0)
       .then((any) => {
-        notify.success("Customer deleted successfully");
-        store.dispatch(customerDeletedAction(id));
-        navigate("/admin/customer");
+        notify.success(SccMsg.DELETED_CUSTOMER);
+        store.dispatch(customerDeletedAction(props.id || 0))
+        props.handleClose();
       })
       .catch((err) => {
-        notify.error(err.message);
+        notify.error(err);
+      });
+      return store.subscribe(() => {
+        props.setCustomers(store.getState().customerReducer.customers);
       });
   };
 
   const no = () => {
-    navigate("/admin/customer");
+    props.handleClose();
   };
   return (
-    <div className="DeleteCustomer">
-      <h2>Delete Customer</h2>
-      <h3>Are you sure you want to delete customer #{id}?</h3>
-      <div>
-        <Button variant="danger" onClick={yes}>
-          Yes
-        </Button>
-        <Button variant="default" onClick={no}>
-          No
-        </Button>
-      </div>
-    </div>
+    <>
+      <Modal show={props.show} onHide={props.handleClose}>
+        <Modal.Header>
+          <Modal.Title>Delete Customer</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Are you sure you want to delete customer #{props.id}?
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={yes} variant="danger" className="mx-2">
+            Yes
+          </Button>
+          <Button onClick={no} variant="secondary">
+            No
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 }
 

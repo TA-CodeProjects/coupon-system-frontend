@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { CouponsModel } from "../../../Models/Coupons";
 import { couponsDownloadedAction } from "../../../Redux/CouponCustomerAppState";
 import store from "../../../Redux/store";
-import notify, { ErrMsg } from "../../../Services/Notification";
+import notify, { ErrMsg, SccMsg } from "../../../Services/Notification";
 import { getCoupons } from "../../../WebApi/CouponsCustomerApi";
 import CouponTable from "../../CustomerArea/CouponTable/CouponTable";
 import "./CouponList.css";
@@ -25,12 +25,12 @@ function CouponCustomerList(): JSX.Element {
     useEffect(() => {
       getCoupons()
         .then((res) => {
-          notify.success("Got coupons list successfully!");
+          notify.success(SccMsg.GOT_COUPONS);
           setCoupons(res.data);
           store.dispatch(couponsDownloadedAction(res.data));
         })
         .catch((err) => {
-          notify.error(err.message);
+          notify.error(err);
         });
     }, []);
     

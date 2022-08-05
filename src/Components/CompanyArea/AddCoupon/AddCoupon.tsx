@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { appendErrors, useForm } from "react-hook-form";
 import "./AddCoupon.css";
-import { CouponsPayloadModel } from "../../../Models/Coupons";
+import { CouponsModel } from "../../../Models/Coupons";
 import notify, { ErrMsg } from "../../../Services/Notification";
 import store from "../../../Redux/store";
 import { Button, Form } from "react-bootstrap";
@@ -20,16 +20,18 @@ function AddCoupon(): JSX.Element {
        description: yup.string().required("description is required"),
        startDate: yup
          .date()
+         .min(new Date(), "past due date? come on!")
          .default(new Date())
          .typeError("You must specify coupon date")
-         .required("When is required")
+         .required("Start date is required")
          .nullable()
          .default(() => new Date()),
        endDate: yup
          .date()
+         .min(yup.ref("startDate"), "end date can't be before start date")
          .default(new Date())
          .typeError("You must specify coupon date")
-         .required("When is required")
+         .required("End date is required")
          .nullable()
          .default(() => new Date()),
        amount: yup.number(),
@@ -41,12 +43,12 @@ function AddCoupon(): JSX.Element {
        register,
        handleSubmit,
        formState: { errors, isDirty, isValid },
-     } = useForm<CouponsPayloadModel>({
+     } = useForm<CouponsModel>({
        mode: "all",
        resolver: yupResolver(schema),
      });
 
-     const yalla = async (coupon: CouponsPayloadModel) => {
+     const yalla = async (coupon: CouponsModel) => {
        console.log(coupon);
        console.log(JSON.stringify(coupon));
 

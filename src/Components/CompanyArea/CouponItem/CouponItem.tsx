@@ -1,34 +1,53 @@
 import moment from "moment";
+import { useState } from "react";
+import { Button } from "react-bootstrap";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import { CouponsModel } from "../../../Models/Coupons";
-import CustomLink from "../../SharedArea/CustomLink/CustomLink";
+import DeleteCoupon from "../DeleteCoupon/DeleteCoupon";
 import "./CouponItem.css";
 
-interface CouponItemProps{
-    coupon: CouponsModel;
+interface CouponItemProps {
+  couponsCompany: CouponsModel;
+  setCouponsCompany: React.Dispatch<React.SetStateAction<CouponsModel[]>>;
 }
 
 function CouponItem(props: CouponItemProps): JSX.Element {
+  const [show, SetShow] = useState(false);
+  const handleClose = () => SetShow(false);
+  const handleShow = () => SetShow(true);
+
     return (
       <tr>
-        <td>{props.coupon.category}</td>
-        <td>{props.coupon.id}</td>
-        <td>{props.coupon.title}</td>
-        <td>{props.coupon.description}</td>
-        <td>{moment(props.coupon.startDate).format("DD/MM/yyyy")}</td>
-        <td>{moment(props.coupon.endDate).format("DD/MM/yyyy")}</td>
-        <td>{props.coupon.price}</td>
-        <td>{props.coupon.amount}</td>
-        <td>{props.coupon.image}</td>
+        <td>{props.couponsCompany.category}</td>
+        <td>{props.couponsCompany.id}</td>
+        <td>{props.couponsCompany.title}</td>
+        <td>{props.couponsCompany.description}</td>
+        <td>{moment(props.couponsCompany.startDate).format("DD/MM/yyyy")}</td>
+        <td>{moment(props.couponsCompany.endDate).format("DD/MM/yyyy")}</td>
+        <td>{props.couponsCompany.price}</td>
+        <td>{props.couponsCompany.amount}</td>
+        <td>{props.couponsCompany.image}</td>
         <td>
-          <CustomLink to={`/company/edit/${props.coupon.id}`}>
-            <FaEdit size={32} />
-          </CustomLink>
+          <Button variant="default">
+            <Link
+              to={`/company/edit/${props.couponsCompany.id}`}
+              className="link-dark"
+            >
+              <FaEdit size={26} />
+            </Link>
+          </Button>
         </td>
         <td>
-          <CustomLink to={`/company/delete/${props.coupon.id}`}>
-            <FaTrash size={32} />
-          </CustomLink>
+          <Button onClick={handleShow} variant="default">
+            <FaTrash size={26} />
+          </Button>
+          <DeleteCoupon
+            id={props.couponsCompany.id}
+            show={show}
+            handleClose={handleClose}
+            setCouponsCompany={props.setCouponsCompany}
+          />
         </td>
       </tr>
     );

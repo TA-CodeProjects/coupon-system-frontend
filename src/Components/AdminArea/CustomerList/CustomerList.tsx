@@ -4,39 +4,39 @@ import store from "../../../Redux/store";
 import axios from "axios";
 import "./CustomerList.css";
 import globals from "../../../Services/globals";
-import notify, { ErrMsg } from "../../../Services/Notification";
+import notify, { ErrMsg, SccMsg } from "../../../Services/Notification";
 import { customersDownloadedAction } from "../../../Redux/CustomerAppState";
 import CustomLink from "../../SharedArea/CustomLink/CustomLink";
 import CustomerItem from "../CustomerItem/CustomerItem";
 import { Button, ButtonGroup, Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { getCustomers } from "../../../WebApi/CustomersApi";
+import { useToken } from "../../../Services/LoginHook";
 
 function CustomerList(): JSX.Element {
   const navigate = useNavigate();
   
-   useEffect(() => {
-     if (!store.getState().authState.user.jwt_token) {
-       notify.error(ErrMsg.PLS_LOGIN);
-       navigate("/login");
-     }
-   }, []);  
+  useToken();
 
   const [customers, setCustomers] = useState<CustomerModel[]>(
     store.getState().customerReducer.customers
   );
 
   useEffect(() => {
-        getCustomers()
+    if (customers.length === 0) {
+       getCustomers()
           .then((res) => {
-            notify.success("Got customers list successfully!");
+            notify.success(SccMsg.GOT_CUSTOMERS);
             setCustomers(res.data);
             store.dispatch(customersDownloadedAction(res.data));
           })
           .catch((err) => {
-            notify.error(err.message);
+            notify.error(err);
           });
+        }
   }, []);
+    
+       
 
   return (
     <div className="CustomerList">
@@ -64,7 +64,7 @@ function CustomerList(): JSX.Element {
             </thead>
             <tbody>
               {customers.map((c) => (
-                <CustomerItem key={c.id} customer={c} />
+                <CustomerItem key={c.id} customer={c} setCustomers={setCustomers}/>
               ))}
             </tbody>
           </Table>

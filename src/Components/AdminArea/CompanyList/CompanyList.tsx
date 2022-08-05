@@ -4,37 +4,35 @@ import Table from "react-bootstrap/Table";
 import "./CompanyList.css";
 import { useEffect, useState } from "react";
 import { CompanyModel } from "../../../Models/Company";
-import notify, { ErrMsg } from "../../../Services/Notification";
+import notify, { ErrMsg, SccMsg } from "../../../Services/Notification";
 import CustomLink from "../../SharedArea/CustomLink/CustomLink";
 import store from "../../../Redux/store";
 import { companiesDownloadedAction } from "../../../Redux/CompanyAppState";
 import { Button, ButtonGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { getCompanies } from "../../../WebApi/CompaniesApi";
+import { useToken } from "../../../Services/LoginHook";
 
 function CompanyList(): JSX.Element {
     const navigate = useNavigate();
     const [companies, setCompanies] = useState<CompanyModel[]>(store.getState().companyReducer.companies);
 
-     useEffect(() => {
-       if (!store.getState().authState.user.jwt_token) {
-         notify.error(ErrMsg.PLS_LOGIN);
-         navigate("/login");
-       }
-     }, []);  
+    useToken();
 
     useEffect(() => {
+      if (companies.length === 0) {
          getCompanies()
         .then((res) => {
-            notify.success('Got companies list successfully!');
+            notify.success(SccMsg.GOT_COMPANIES);
             setCompanies(res.data);
             store.dispatch(companiesDownloadedAction(res.data));
         })
         .catch((err) => {
             notify.error(err.message);
         });
+      }
     },[]);
-      
+  
        
 
 
@@ -62,7 +60,7 @@ function CompanyList(): JSX.Element {
               </thead>
               <tbody>
                 {companies.map((c) => (
-                  <CompanyItem key={c.id} company={c} />
+                  <CompanyItem key={c.id} company={c} setCompanies={setCompanies}/>
                 ))}
               </tbody>
             </Table>

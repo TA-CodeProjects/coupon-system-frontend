@@ -55,7 +55,7 @@ function EditCustomer(): JSX.Element {
     await updateCustomer(id, customer)
       .then((res) => {
         notify.success("Customer Update");
-        store.dispatch(customerUpdatedAction(res.data));
+        store.dispatch(customerUpdatedAction(customer));
         navigate("/admin/customer");
       })
       .catch((err) => {

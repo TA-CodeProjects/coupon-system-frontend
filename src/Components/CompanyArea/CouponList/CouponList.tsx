@@ -1,44 +1,34 @@
 import { useEffect, useState } from "react";
 import { CouponsModel } from "../../../Models/Coupons";
 import store from "../../../Redux/store";
-import axios from "axios";
 import "./CouponList.css";
-import globals from "../../../Services/globals";
-import notify, { ErrMsg } from "../../../Services/Notification";
+import notify, { SccMsg } from "../../../Services/Notification";
 import { couponsDownloadedAction } from "../../../Redux/CouponCompanyAppState";
 import { Button, ButtonGroup, Dropdown, DropdownButton, Table } from "react-bootstrap";
-import CustomLink from "../../SharedArea/CustomLink/CustomLink";
-import CouponItem from "../CouponItem/CouponItem";
 import { getCoupons } from "../../../WebApi/CouponsCompanyApi";
 import CouponTable from "../CouponTable/CouponTable";
 import { Link, useNavigate } from "react-router-dom";
+import { useToken } from "../../../Services/LoginHook";
 
 function CouponList(): JSX.Element {
-      const navigate = useNavigate();
 
-      useEffect(() => {
-        if (!store.getState().authState.user.jwt_token) {
-          notify.error(ErrMsg.PLS_LOGIN);
-          navigate("/login");
-        }
-      }, []);  
+      useToken();
 
-     const [coupons, setCoupons] = useState<CouponsModel[]>(
-      store.getState().couponsCompanyReducer.coupons
-     );
+     const [couponsCompany, setCouponsCompany] = useState<CouponsModel[]>([]);
       
-    
 
      useEffect(() => {
-        getCoupons()
-         .then((res) => {
-           notify.success("Got coupons list successfully!");
-           setCoupons(res.data);
-           store.dispatch(couponsDownloadedAction(res.data));
-         })
-         .catch((err) => {
-           notify.error(err.message);
-         });
+      if (couponsCompany.length === 0) {
+         getCoupons()
+           .then((res) => {
+             notify.success(SccMsg.GOT_COUPONS);
+             setCouponsCompany(res.data);
+             store.dispatch(couponsDownloadedAction(res.data));
+           })
+           .catch((err) => {
+             notify.error(err);
+           });
+      }
      }, []);
 
      
@@ -50,7 +40,7 @@ function CouponList(): JSX.Element {
           <Button variant="success">Add Coupon</Button>
         </Link>
 
-        <CouponTable coupons={coupons} />
+        <CouponTable couponsCompany={couponsCompany} setCouponsCompany={setCouponsCompany} />
       </div>
     );
 }

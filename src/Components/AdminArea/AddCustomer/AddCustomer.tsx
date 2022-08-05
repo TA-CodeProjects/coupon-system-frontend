@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { CustomerPayloadModel } from "../../../Models/Customer";
 import { customerAddedAction } from "../../../Redux/CustomerAppState";
 import store from "../../../Redux/store";
-import notify, { ErrMsg } from "../../../Services/Notification";
+import notify, { SccMsg } from "../../../Services/Notification";
 import { addCustomer } from "../../../WebApi/CustomersApi";
+import "./AddCustomer.css";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
@@ -33,12 +34,12 @@ function AddCustomer(): JSX.Element {
 
     await addCustomer(customer)
       .then((res) => {
-        notify.success("New Customer Created");
+        notify.success(SccMsg.ADDED_CUSTOMER);
         store.dispatch(customerAddedAction(res.data));
         navigate("/admin/customer");
       })
       .catch((err) => {
-        notify.error(err.message);
+        notify.error(err);
       });
   };
 

@@ -37,7 +37,7 @@ function PurchaseCoupon(): JSX.Element {
             navigate("/customer");
         })
         .catch((err) => {
-            notify.error(err.message);
+            notify.error(err);
         });
     };
 

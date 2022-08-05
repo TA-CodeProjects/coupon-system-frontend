@@ -1,46 +1,56 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Button, Modal } from "react-bootstrap";
+import { CompanyModel } from "../../../Models/Company";
 import { companyDeletedAction } from "../../../Redux/CompanyAppState";
 import store from "../../../Redux/store";
-import globals from "../../../Services/globals";
-import notify from "../../../Services/Notification";
+import notify, { SccMsg } from "../../../Services/Notification";
 import { deleteCompany } from "../../../WebApi/CompaniesApi";
 import "./DeleteCompany.css";
 
-function DeleteCompany(): JSX.Element {
+interface DeleteCompanyProps {
+  id?: number;
+  show: boolean;
+  handleClose: any;
+  setCompanies: React.Dispatch<React.SetStateAction<CompanyModel[]>>;
+}
 
-    const navigate = useNavigate();
-    const params = useParams();
-    const id = +(params.id || "");
+function DeleteCompany(props: DeleteCompanyProps): JSX.Element {
 
     const yes = () => {
-      deleteCompany(id)
+      deleteCompany(props.id || 0)
         .then(any => {
-          notify.success("Company deleted successfully");
-          store.dispatch(companyDeletedAction(id));
-          navigate('/admin/company');
+          notify.success(SccMsg.DELETED_COMPANY);
+          store.dispatch(companyDeletedAction(props.id || 0));
+          props.handleClose();
         })
-        .catch((err) => {notify.error(err.message)});
+        .catch((err) => {notify.error(err)});
+        return store.subscribe(() => {
+          props.setCompanies(store.getState().companyReducer.companies);
+        });
     };
 
     const no = () => {
-      navigate('/admin/company');
+      props.handleClose();
     }
     return (
-      <div className="DeleteCompany">
-        <h2>Delete Company</h2>
-        <h3>Are you sure you want to delete company #{id}?</h3>
-        <div>
-          <Button variant="danger" onClick={yes}>
-            Yes
-          </Button>
-          <Button variant="default" onClick={no}>
-            No
-          </Button>
-        </div>
-      </div>
+      <>
+        <Modal show={props.show} onHide={props.handleClose}>
+          <Modal.Header>
+            <Modal.Title>Delete Company</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            Are you sure you want to delete company #{props.id}?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={yes} variant="danger" className="mx-2">
+              Yes
+            </Button>
+            <Button onClick={no} variant="secondary">
+              No
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </>
     );
 }
 

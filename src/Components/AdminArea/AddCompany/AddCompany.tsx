@@ -3,7 +3,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import "./AddCompany.css";
 import { CompanyPayloadModel } from "../../../Models/Company";
-import notify from "../../../Services/Notification";
+import notify, { SccMsg } from "../../../Services/Notification";
 import { Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import store from "../../../Redux/store";
@@ -36,12 +36,12 @@ function AddCompany(): JSX.Element {
 
       addCompany(company)
           .then((res) => {
-            notify.success("New Company Created");
+            notify.success(SccMsg.ADDED_COMPANY);
             store.dispatch(companyAddedAction(res.data));
             navigate("/admin/company");
           })
           .catch((err) => {
-            notify.error(err.message);
+            notify.error(err);
           });
     };
 

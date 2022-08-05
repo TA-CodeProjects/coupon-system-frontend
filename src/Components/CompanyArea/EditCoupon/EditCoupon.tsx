@@ -20,7 +20,9 @@ function EditCoupon(): JSX.Element {
      const [coupon, setCoupon] = useState<CouponsModel>(
        store
          .getState()
-         .couponsCompanyReducer.coupons.filter((coupon) => coupon.id === id)[0]
+         .couponsCompanyReducer.couponsCompany.filter(
+           (coupon) => coupon.id === id
+         )[0]
      );
 
     const schema = yup.object().shape({

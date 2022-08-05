@@ -53,7 +53,7 @@ function EditCompany(): JSX.Element {
       updateCompany(id, company)
         .then((res) => {
           notify.success("Company Update");
-          store.dispatch(companyUpdatedAction(res.data));
+          store.dispatch(companyUpdatedAction(company));
           navigate("/admin/company");
         })
         .catch((err) => {
@@ -65,15 +65,6 @@ function EditCompany(): JSX.Element {
       <div className="EditCompany">
         <h2 className="text-center">Update Company</h2>
         <Form onSubmit={handleSubmit(yalla)}>
-          {/* <Form.Group className="mb-3" controlId="formName">
-            <Form.Label>Id</Form.Label>
-            <Form.Control
-              {...register("id")}
-              type="number"
-              disabled={true}
-              placeholder="Id"
-            />
-          </Form.Group> */}
           <Form.Group className="mb-3" controlId="formName">
             <Form.Label>Name</Form.Label>
             <Form.Control

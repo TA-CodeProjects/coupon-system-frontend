@@ -37,15 +37,12 @@ function Routing(): JSX.Element {
         <Route path="/admin/company" element={<CompanyList />} />
         <Route path="/admin/company/add" element={<AddCompany />} />
         <Route path="/admin/company/edit/:id" element={<EditCompany />} />
-        <Route path="/admin/company/delete/:id" element={<DeleteCompany />} />
         <Route path="/admin/customer" element={<CustomerList />} />
         <Route path="/admin/customer/add" element={<AddCustomer />} />
         <Route path="/admin/customer/edit/:id" element={<EditCustomer />} />
-        <Route path="/admin/customer/delete/:id" element={<DeleteCustomer />} />
         <Route path="/company" element={<CouponList />} />
         <Route path="/company/add" element={<AddCoupon />} />
         <Route path="/company/edit/:id" element={<EditCoupon />} />
-        <Route path="/company/delete/:id" element={<DeleteCoupon />} />
         <Route path="/customer" element={<CouponCustomerList />} />
         <Route path="/customer/purchaseCoupon/:id" element={<PurchaseCoupon />} />
         <Route path="/login" element={<Login />} />

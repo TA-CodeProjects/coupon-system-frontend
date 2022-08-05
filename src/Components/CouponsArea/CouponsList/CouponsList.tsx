@@ -3,7 +3,7 @@ import {  Col, Container, Row } from "react-bootstrap";
 import { CouponsModel } from "../../../Models/Coupons";
 import { couponsDownloadedAction } from "../../../Redux/CouponsAppState";
 import store from "../../../Redux/store";
-import notify from "../../../Services/Notification";
+import notify, { SccMsg } from "../../../Services/Notification";
 import { getCoupons } from "../../../WebApi/CouponsApi";
 import CouponItem from "../CouponItem/CouponItem";
 import CouponTable from "../CouponTable/CouponTable";
@@ -18,7 +18,7 @@ function CouponsList(): JSX.Element {
       // if (coupons?.length === 0) {
          getCoupons()
            .then((res) => {
-             notify.success("Got Coupons List Successfully!");
+             notify.success(SccMsg.GOT_COUPONS);
              setCoupons(res.data);
              store.dispatch(couponsDownloadedAction(res.data));
            })

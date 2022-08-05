@@ -15,7 +15,8 @@ export class CouponsModel {
          this.startDate = startDate; this.endDate = endDate; this.amount = amount; this.price = price; this.image = image; }
 }
 
-export class CouponsPayloadModel {
+export class CouponsCompanyModel {
+  public id?: number;
   public category?: string;
   public title?: string;
   public description?: string;
@@ -26,6 +27,7 @@ export class CouponsPayloadModel {
   public image?: string;
 
   public constructor(
+    id?: number,
     category?: string,
     title?: string,
     description?: string,
@@ -35,6 +37,7 @@ export class CouponsPayloadModel {
     price?: number,
     image?: string
   ) {
+    this.id = id;
     this.category = category;
     this.title = title;
     this.description = description;

@@ -1,16 +1,19 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {  Dropdown, DropdownButton, Table } from "react-bootstrap";
 import { CouponsModel } from "../../../Models/Coupons";
 import CouponItem from "../CouponItem/CouponItem";
 import "./CouponTable.css";
 
 interface CouponTableProps {
-    coupons : CouponsModel[];
+  couponsCompany: CouponsModel[];
+  setCouponsCompany: React.Dispatch<React.SetStateAction<CouponsModel[]>>;
 }
 
 
 function CouponTable(props: CouponTableProps): JSX.Element {
-  let [coupons, setCoupons] = useState<CouponsModel[]>(props.coupons);
+  let [couponsCompany, setCouponsCompany] = useState<CouponsModel[]>(
+    props.couponsCompany
+  );
   const [price, setPrice] = useState<number>(0);
   const [select, setSelect] = useState<String>("All")
 
@@ -19,14 +22,14 @@ function CouponTable(props: CouponTableProps): JSX.Element {
   }
      
   const handleSelect = (e: any) => {
-    let filtered = props.coupons;
+    let filtered = props.couponsCompany;
     if( e !== 'All') {
-      filtered = props.coupons.filter((c) => {
+      filtered = props.couponsCompany.filter((c) => {
         return c.category === e;
       });
       } 
     setSelect(e);
-    setCoupons(filtered);
+    setCouponsCompany(filtered);
   };
 
 
@@ -49,7 +52,8 @@ function CouponTable(props: CouponTableProps): JSX.Element {
             <input type="range" max={100} onInput={handleInput} />
           </div>
         </div>
-        {(select === "All" ? props.coupons : coupons).length > 0 ? (
+        {(select === "All" ? props.couponsCompany : couponsCompany).length >
+        0 ? (
           <div className="Table pt-2">
             <Table striped bordered hover>
               <thead>
@@ -66,12 +70,18 @@ function CouponTable(props: CouponTableProps): JSX.Element {
                 <th></th>
               </thead>
               <tbody>
-                {(select === "All" ? props.coupons : coupons)
+                {(select === "All" ? props.couponsCompany : couponsCompany)
                   .filter((c) => {
                     return c.price! > price;
                   })
                   .map((c) => {
-                    return <CouponItem key={c.id} coupon={c} />;
+                    return (
+                      <CouponItem
+                        key={c.id}
+                        couponsCompany={c}
+                        setCouponsCompany={setCouponsCompany}
+                      />
+                    );
                   })}
               </tbody>
             </Table>

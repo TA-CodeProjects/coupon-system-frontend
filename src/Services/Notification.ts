@@ -5,7 +5,7 @@ export enum SccMsg {
   ADDED_COMPANY = "Added company successfully",
   UPDATED_COMPANY = "Updated company successfully",
   DELETED_COMPANY = "Deleted company successfully",
-  GOT_COMPANY = "Got companies successfully",
+  GOT_COMPANIES = "Got companies successfully",
   ADDED_CUSTOMER = "Added customer successfully",
   UPDATED_CUSTOMER = "Updated customer successfully",
   DELETED_CUSTOMER = "Deleted customer successfully",
@@ -40,23 +40,11 @@ class Notify {
   private extractMsg(err: any): string {
 
     if (typeof err === "string") {
-        return err;
+      return err;
     }
 
-    if(typeof err?.response?.data?.description === 'string'){
-        return err?.response?.data?.description;
-    }
-
-    if (typeof err?.response?.data === 'string'){
-        return err?.response?.data;
-    }
-
-    if (Array.isArray(err?.response?.data)) {
-        return err?.response?.data[0];
-    }
-
-    if (typeof err?.message === 'string') {
-        return err.message;
+    if (typeof err?.response?.data?.value === "string") {
+      return err?.response?.data?.value;
     }
 
     return "An error occurred, please try again.";
