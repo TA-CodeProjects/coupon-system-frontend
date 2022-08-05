@@ -7,37 +7,37 @@ import store from "../../../Redux/store";
 import { Button, Form } from "react-bootstrap";
 import { couponAddedAction } from "../../../Redux/CouponCompanyAppState";
 import { addCoupon } from "../../../WebApi/CouponsCompanyApi";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
+// import * as yup from "yup";
+// import { yupResolver } from "@hookform/resolvers/yup";
 
 function AddCoupon(): JSX.Element {
      const navigate = useNavigate();
      
 
-     const schema = yup.object().shape({
-       category: yup.string().required("Category is required"),
-       title: yup.string().required("Title is required"),
-       description: yup.string().required("description is required"),
-       startDate: yup
-         .date()
-         .min(new Date(), "past due date? come on!")
-         .default(new Date())
-         .typeError("You must specify coupon date")
-         .required("Start date is required")
-         .nullable()
-         .default(() => new Date()),
-       endDate: yup
-         .date()
-         .min(yup.ref("startDate"), "end date can't be before start date")
-         .default(new Date())
-         .typeError("You must specify coupon date")
-         .required("End date is required")
-         .nullable()
-         .default(() => new Date()),
-       amount: yup.number(),
-       price: yup.number(),
-       image: yup.string().required("Image is required"),
-     });
+    //  const schema = yup.object().shape({
+    //    category: yup.string().required("Category is required"),
+    //    title: yup.string().required("Title is required"),
+    //    description: yup.string().required("description is required"),
+    //    startDate: yup
+    //      .date()
+    //      .min(new Date(), "past due date? come on!")
+    //      .default(new Date())
+    //      .typeError("You must specify coupon date")
+    //      .required("Start date is required")
+    //      .nullable()
+    //      .default(() => new Date()),
+    //    endDate: yup
+    //      .date()
+    //      .min(yup.ref("startDate"), "end date can't be before start date")
+    //      .default(new Date())
+    //      .typeError("You must specify coupon date")
+    //      .required("End date is required")
+    //      .nullable()
+    //      .default(() => new Date()),
+    //    amount: yup.number(),
+    //    price: yup.number(),
+    //    image: yup.string().required("Image is required"),
+    //  });
      
      const {
        register,
@@ -45,7 +45,7 @@ function AddCoupon(): JSX.Element {
        formState: { errors, isDirty, isValid },
      } = useForm<CouponsModel>({
        mode: "all",
-       resolver: yupResolver(schema),
+      //  resolver: yupResolver(schema),
      });
 
      const yalla = async (coupon: CouponsModel) => {

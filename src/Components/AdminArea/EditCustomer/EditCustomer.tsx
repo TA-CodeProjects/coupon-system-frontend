@@ -7,8 +7,8 @@ import { customerUpdatedAction } from "../../../Redux/CustomerAppState";
 import store from "../../../Redux/store";
 import notify, { ErrMsg } from "../../../Services/Notification";
 import { updateCustomer } from "../../../WebApi/CustomersApi";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
+// import * as yup from "yup";
+// import { yupResolver } from "@hookform/resolvers/yup";
 import "./EditCustomer.css";
 
 function EditCustomer(): JSX.Element {
@@ -25,12 +25,12 @@ function EditCustomer(): JSX.Element {
   );
   console.log(id);
 
-  const schema = yup.object().shape({
-    firstName: yup.string().required("First name is required"),
-    lastName: yup.string().required("Last name is required"),
-    email: yup.string().email("Email is required"),
-    password: yup.string().min(4).max(15).required("Password is required"),
-  });
+  // const schema = yup.object().shape({
+  //   firstName: yup.string().required("First name is required"),
+  //   lastName: yup.string().required("Last name is required"),
+  //   email: yup.string().email("Email is required"),
+  //   password: yup.string().min(4).max(15).required("Password is required"),
+  // });
 
 
   let defaultValuesObj = { ...customer };
@@ -43,7 +43,7 @@ function EditCustomer(): JSX.Element {
   } = useForm<CustomerModel>({
     defaultValues: defaultValuesObj,
     mode: "all",
-    resolver: yupResolver(schema),
+    // resolver: yupResolver(schema),
   });
 
   const { dirtyFields } = useFormState({ control });

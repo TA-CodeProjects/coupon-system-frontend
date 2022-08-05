@@ -1,6 +1,6 @@
 import { appendErrors, useForm } from "react-hook-form";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
+// import * as yup from "yup";
+// import { yupResolver } from "@hookform/resolvers/yup";
 import "./AddCompany.css";
 import { CompanyPayloadModel } from "../../../Models/Company";
 import notify, { SccMsg } from "../../../Services/Notification";
@@ -15,11 +15,11 @@ function AddCompany(): JSX.Element {
 
     const navigate = useNavigate();
     
-    const schema = yup.object().shape({
-      name: yup.string().required("name is required"),
-      email: yup.string().email("Email is required"),
-      password: yup.string().min(4).max(15).required("Password is required"),
-    });
+    // const schema = yup.object().shape({
+    //   name: yup.string().required("name is required"),
+    //   email: yup.string().email("Email is required"),
+    //   password: yup.string().min(4).max(15).required("Password is required"),
+    // });
 
     const {
       register,
@@ -27,7 +27,7 @@ function AddCompany(): JSX.Element {
       formState: { errors, isDirty, isValid },
     } = useForm<CompanyPayloadModel>({
       mode: "all",
-      resolver: yupResolver(schema),
+      // resolver: yupResolver(schema),
     });
 
     const yalla = async (company: CompanyPayloadModel) => {

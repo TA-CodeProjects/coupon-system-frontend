@@ -7,18 +7,18 @@ import store from "../../../Redux/store";
 import notify, { SccMsg } from "../../../Services/Notification";
 import { addCustomer } from "../../../WebApi/CustomersApi";
 import "./AddCustomer.css";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
+// import * as yup from "yup";
+// import { yupResolver } from "@hookform/resolvers/yup";
 
 function AddCustomer(): JSX.Element {
   const navigate = useNavigate();
 
-  const schema = yup.object().shape({
-    firstName: yup.string().required("First name is required"),
-    lastName: yup.string().required("Last name is required"),
-    email: yup.string().email("Email is required"),
-    password: yup.string().min(4).max(15).required("Password is required"),
-  });
+  // const schema = yup.object().shape({
+  //   firstName: yup.string().required("First name is required"),
+  //   lastName: yup.string().required("Last name is required"),
+  //   email: yup.string().email("Email is required"),
+  //   password: yup.string().min(4).max(15).required("Password is required"),
+  // });
 
   const {
     register,
@@ -26,7 +26,7 @@ function AddCustomer(): JSX.Element {
     formState: { errors, isDirty, isValid },
   } = useForm<CustomerPayloadModel>({
     mode: "all",
-    resolver: yupResolver(schema),
+    // resolver: yupResolver(schema),
   });
 
   const yalla = async (customer: CustomerPayloadModel) => {

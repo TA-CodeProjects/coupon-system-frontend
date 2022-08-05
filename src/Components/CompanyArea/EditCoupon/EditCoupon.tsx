@@ -7,8 +7,8 @@ import { couponUpdatedAction } from "../../../Redux/CouponCompanyAppState";
 import store from "../../../Redux/store";
 import notify from "../../../Services/Notification";
 import { updateCoupon } from "../../../WebApi/CouponsCompanyApi";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
+// import * as yup from "yup";
+// import { yupResolver } from "@hookform/resolvers/yup";
 import "./EditCoupon.css";
 
 function EditCoupon(): JSX.Element {
@@ -25,28 +25,28 @@ function EditCoupon(): JSX.Element {
          )[0]
      );
 
-    const schema = yup.object().shape({
-      category: yup.string().required("Category is required"),
-      title: yup.string().required("Title is required"),
-      description: yup.string().required("description is required"),
-      startDate: yup
-        .date()
-        .default(new Date())
-        .typeError("You must specify task date")
-        .required("When is required")
-        .nullable()
-        .default(() => new Date()),
-      endDate: yup
-        .date()
-        .default(new Date())
-        .typeError("You must specify task date")
-        .required("When is required")
-        .nullable()
-        .default(() => new Date()),
-      amount: yup.number(),
-      price: yup.number(),
-      image: yup.string().required("Image is required"),
-    });
+    // const schema = yup.object().shape({
+    //   category: yup.string().required("Category is required"),
+    //   title: yup.string().required("Title is required"),
+    //   description: yup.string().required("description is required"),
+    //   startDate: yup
+    //     .date()
+    //     .default(new Date())
+    //     .typeError("You must specify task date")
+    //     .required("When is required")
+    //     .nullable()
+    //     .default(() => new Date()),
+    //   endDate: yup
+    //     .date()
+    //     .default(new Date())
+    //     .typeError("You must specify task date")
+    //     .required("When is required")
+    //     .nullable()
+    //     .default(() => new Date()),
+    //   amount: yup.number(),
+    //   price: yup.number(),
+    //   image: yup.string().required("Image is required"),
+    // });
 
      let defaultValuesObj = { ...coupon };
      console.log(coupon)
@@ -59,7 +59,7 @@ function EditCoupon(): JSX.Element {
      } = useForm<CouponsModel>({
        defaultValues: defaultValuesObj,
        mode: "all",
-       resolver: yupResolver(schema),
+      //  resolver: yupResolver(schema),
      });
 
      const { dirtyFields } = useFormState({ control });
