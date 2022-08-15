@@ -7,8 +7,8 @@ import { Button, Form } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import store from "../../../Redux/store";
 import { companyUpdatedAction } from "../../../Redux/CompanyAppState";
-// import * as yup from "yup";
-// import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { updateCompany } from "../../../WebApi/CompaniesApi";
 
 function EditCompany(): JSX.Element {
@@ -24,11 +24,11 @@ function EditCompany(): JSX.Element {
 
       console.log(id);
 
-    //  const schema = yup.object().shape({
-    //    name: yup.string().required("name is required"),
-    //    email: yup.string().email("Email is required"),
-    //    password: yup.string().min(4).max(15).required("Password is required"),
-    //  });
+     const schema = yup.object().shape({
+       name: yup.string().required("name is required"),
+       email: yup.string().email("Email is required"),
+       password: yup.string().min(4).max(15).required("Password is required"),
+     });
 
     let defaultValuesObj = {...company};
     
@@ -41,7 +41,7 @@ function EditCompany(): JSX.Element {
     } = useForm<CompanyModel>({
       defaultValues: defaultValuesObj,
       mode: "all",
-      // resolver: yupResolver(schema),
+      resolver: yupResolver(schema),
     });
 
     const {dirtyFields} = useFormState({control});

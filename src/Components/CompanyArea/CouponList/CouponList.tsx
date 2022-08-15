@@ -16,7 +16,6 @@ function CouponList(): JSX.Element {
 
      const [couponsCompany, setCouponsCompany] = useState<CouponsModel[]>([]);
       
-
      useEffect(() => {
       if (couponsCompany.length === 0) {
          getCoupons()

@@ -1,4 +1,5 @@
 import { Button, Modal } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import { CouponsModel } from "../../../Models/Coupons";
 import { couponDeletedAction } from "../../../Redux/CouponCompanyAppState";
 import store from "../../../Redux/store";
@@ -14,7 +15,7 @@ interface DeleteCouponProps {
 }
 
 function DeleteCoupon(props: DeleteCouponProps): JSX.Element {
-
+    const navigate = useNavigate();
     const yes = () => {
       deleteCoupon(props.id || 0)
         .then((any) => {
@@ -26,11 +27,12 @@ function DeleteCoupon(props: DeleteCouponProps): JSX.Element {
         .catch((err) => {
           notify.error(err);
         });
-        return store.subscribe(() => {
-          props.setCouponsCompany(
-            store.getState().couponsCompanyReducer.couponsCompany
-          );
-        });
+        navigate(0);
+        // return store.subscribe(() => {
+        //   props.setCouponsCompany(
+        //     store.getState().couponsCompanyReducer.couponsCompany
+        //   );
+        // });
     };
 
     const no = () => {
